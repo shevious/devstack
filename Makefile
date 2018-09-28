@@ -7,7 +7,11 @@
 .DEFAULT_GOAL := help
 .PHONY: requirements
 
-DEVSTACK_WORKSPACE ?= $(shell pwd)/..
+#DEVSTACK_WORKSPACE ?= $(shell pwd)/..
+DEVSTACK_WORKSPACE ?= $(shell dirname $$PWD | sed 's/^\///' | sed 's/^./\0:/')
+
+winpath:
+	@echo $$DEVSTACK_WORKSPACE
 
 OS := $(shell uname)
 
