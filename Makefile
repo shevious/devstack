@@ -61,7 +61,10 @@ dev.repo.reset: ## Attempts to reset the local repo checkouts to the master work
 dev.up: | check-memory ## Bring up all services with host volumes
 	docker-compose -f docker-compose.yml -f docker-compose-host.yml up -d
 	@# Comment out this next line if you want to save some time and don't care about catalog programs
-	./programs/provision.sh cache >/dev/null
+	#./programs/provision.sh cache >/dev/null
+
+dev.up.lms: | check-memory ## Bring up all services with host volumes
+	docker-compose -f docker-compose.yml -f docker-compose-host.yml up -d lms
 
 dev.up.watchers: | check-memory ## Bring up asset watcher containers
 	docker-compose -f docker-compose-watchers.yml up -d
@@ -273,7 +276,7 @@ build-courses: ## NOTE: marketing course creation is not available for those out
 	rm course-generator/tmp-config.json
 
 check-memory: ## Check if enough memory has been allocated to Docker
-	@if [ `docker info --format '{{json .}}' | python -c "from __future__ import print_function; import sys, json; print(json.load(sys.stdin)['MemTotal'])"` -lt 2095771648 ]; then echo "\033[0;31mWarning, System Memory is set too low!!! Increase Docker memory to be at least 2 Gigs\033[0m"; fi || exit 0
+	@#if [ `docker info --format '{{json .}}' | python -c "from __future__ import print_function; import sys, json; print(json.load(sys.stdin)['MemTotal'])"` -lt 2095771648 ]; then echo "\033[0;31mWarning, System Memory is set too low!!! Increase Docker memory to be at least 2 Gigs\033[0m"; fi || exit 0
 
 stats: ## Get per-container CPU and memory utilization data
 	docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
