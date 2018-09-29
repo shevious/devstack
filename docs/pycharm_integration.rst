@@ -65,9 +65,10 @@ use the following options:
 
     - ``/edx/app/<SERVICE_NAME>/venvs/<SERVICE_NAME>/bin/python``
 
-  - For example, the path would be the following for the Credentials Service:
+  - For example, the path would be the following for the Ecommerce Service:
 
-    - ``/edx/app/credentials/venvs/credentials/bin/python``
+    - ``/edx/app/ecommerce/venvs/ecommerce/bin/python``
+    - Note: The Credentials Service might not have a virtualenv set up in the container. 
 
   - For either lms or studio, you need to use edxapp:
 
@@ -82,6 +83,8 @@ so you can easily switch back to old without this delay.
 
 **Warning**: When you change configuration files, the service drop-down gets
 reset. Remember to restore to the IDA you wish to test.
+
+**Some Tips**: If your remote isn't loading you may need to set your DEVSTACK_WORKSPACE variable globally in your ./bash_profile. Additionally try reseting docker as a last resort and things should sync successfully after that.
 
 Setup Django Support
 --------------------
