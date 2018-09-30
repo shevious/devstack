@@ -24,7 +24,7 @@ repos=(
     "https://github.com/edx/ecommerce.git"
     "https://github.com/edx/edx-e2e-tests.git"
     "https://github.com/edx/edx-notes-api.git"
-    #"https://github.com/edx/edx-platform.git"
+    "https://github.com/edx/edx-platform.git"
     "https://github.com/edx/xqueue.git"
     "https://github.com/edx/edx-analytics-pipeline.git"
 )
@@ -54,11 +54,19 @@ _checkout ()
 
         # If a directory exists and it is nonempty, assume the repo has been cloned.
         if [ -d "$name" -a -n "$(ls -A "$name" 2>/dev/null)" ]; then
-            cd $name
-            echo "Checking out branch $branch of $name"
-            git pull
-            git checkout "$branch"
-            cd ..
+	    if [ "$name" == "edx-platform" ]; then
+		echo "Checking out branch $branch of $name"
+		cd devstack
+		docker-compose exec lms bash -c "cd /edx/app/edxapp/edx-platform && git checkout $branch"
+		cd ..
+            else
+		cd $name
+		echo "Checking out branch $branch of $name"
+		git pull
+		git checkout -- .
+		git checkout "$branch"
+		cd ..
+	    fi
         fi
     done
 }
@@ -83,6 +91,14 @@ _clone ()
         # If a directory exists and it is nonempty, assume the repo has been checked out.
         if [ -d "$name" -a -n "$(ls -A "$name" 2>/dev/null)" ]; then
             printf "The [%s] repo is already checked out. Continuing.\n" $name
+	elif [ "$name" == "edx-platform" ]; then
+	    cd devstack
+	    docker-compose -f docker-compose.yml -f docker-compose-clone.yml up -d lms
+	    docker-compose exec lms bash -c "cd /edx/app/edxapp && git clone $repo"
+            if [ -n "${OPENEDX_RELEASE}" ]; then
+		docker-compose exec lms bash -c "cd /edx/app/edxapp/edx-platform && git checkout open-release/${OPENEDX_RELEASE}"
+	    fi
+	    cd -
         else
             if [ "${SHALLOW_CLONE}" == "1" ]; then
                 git clone --depth=1 $repo
@@ -90,9 +106,7 @@ _clone ()
                 git clone $repo
             fi
             if [ -n "${OPENEDX_RELEASE}" ]; then
-		cd $name
                 git checkout open-release/${OPENEDX_RELEASE}
-		cd -
             fi
         fi
     done
