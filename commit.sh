@@ -20,8 +20,6 @@ containers=(
     "forum"
     "lms"
     "studio"
-    "firefox"
-    "chrome"
     "ecommerce"
     "edx_notes_api"
     "devpi"
