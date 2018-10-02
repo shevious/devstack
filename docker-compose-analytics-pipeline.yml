@@ -87,8 +87,7 @@ services:
       - 127.0.0.1:8081:8081       # spark worker UI
 
   vertica:
-    image: iamamr/vertica:9.1.0-0
-    hostname: vertica
+    image: sumitchawla/vertica:latest
     container_name: edx.devstack.analytics_pipeline.vertica
     volumes:
       - vertica_data:/home/dbadmin/docker
