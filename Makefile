@@ -11,7 +11,7 @@ DEVSTACK_WORKSPACE ?= $(shell pwd)/..
 
 OS := $(shell uname)
 
-COMPOSE_PROJECT_NAME=devstack
+COMPOSE_PROJECT_NAME=hawthorn
 
 export DEVSTACK_WORKSPACE
 export COMPOSE_PROJECT_NAME
@@ -36,6 +36,9 @@ upgrade: ## Upgrade requirements with pip-tools
 
 dev.checkout: ## Check out "openedx-release/$OPENEDX_RELEASE" in each repo if set, "master" otherwise
 	./repo.sh checkout
+
+dev.commit: ## commit images
+	./commit.sh 
 
 dev.clone: ## Clone service repos to the parent directory
 	./repo.sh clone
