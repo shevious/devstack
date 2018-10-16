@@ -53,10 +53,10 @@ dev.checkout: ## Check out "openedx-release/$OPENEDX_RELEASE" in each repo if se
 	./repo.sh checkout
 
 dev.commit: ## commit images
-       ./commit.sh 
+	./commit.sh 
 
 dev.changeimage: ## commit images
-       ./changeimage.sh 
+	./changeimage.sh 
 
 dev.clone: ## Clone service repos to the parent directory
 	./repo.sh clone
