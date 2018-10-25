@@ -43,6 +43,12 @@ dev.commit: ## commit images
 dev.changeimage: ## commit images
 	./changeimage.sh 
 
+dev.backupdb: ## backup databases
+	./backup-db.sh 
+
+dev.restoredb: ## restore databases
+	./restore-db.sh 
+
 dev.clone: ## Clone service repos to the parent directory
 	./repo.sh clone
 
