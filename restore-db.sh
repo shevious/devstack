@@ -32,7 +32,7 @@ _restore()
                 echo erasing volume ${COMPOSE_PROJECT_NAME}_${volume}_data
                 docker volume rm ${COMPOSE_PROJECT_NAME}_${volume}_data
             fi
-            echo ./docker_clone_volume.sh ${COMPOSE_PROJECT_NAME}_${volume}_data_bak ${COMPOSE_PROJECT_NAME}_${volume}_data
+            ./docker_clone_volume.sh ${COMPOSE_PROJECT_NAME}_${volume}_data_bak ${COMPOSE_PROJECT_NAME}_${volume}_data
         fi
     done
 }
