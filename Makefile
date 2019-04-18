@@ -74,9 +74,16 @@ dev.up: | check-memory ## Bring up all services with host volumes
 	docker-compose -f docker-compose.yml -f docker-compose-host.yml up -d
 	@# Comment out this next line if you want to save some time and don't care about catalog programs
 	#./programs/provision.sh cache >/dev/null
+	#./programs/provision.sh cache
+
+dev.cache:
+	./programs/provision.sh cache
 
 dev.up.lms:
 	docker-compose -f docker-compose.yml -f docker-compose-host.yml up -d lms
+
+dev.up.elasticsearch:
+	docker-compose -f docker-compose.yml up -d elasticsearch
 
 dev.up.watchers: | check-memory ## Bring up asset watcher containers
 	docker-compose -f docker-compose-watchers.yml up -d
@@ -96,6 +103,8 @@ dev.sync.requirements: ## Install requirements
 
 dev.sync.up: dev.sync.daemon.start ## Bring up all services with docker-sync enabled
 	docker-compose -f docker-compose.yml -f docker-compose-sync.yml up -d
+	#./programs/provision.sh cache >/dev/null
+	./programs/provision.sh cache
 
 provision: | dev.provision ## This command will be deprecated in a future release, use dev.provision
 	echo "\033[0;31mThis command will be deprecated in a future release, use dev.provision\033[0m"
@@ -103,6 +112,7 @@ provision: | dev.provision ## This command will be deprecated in a future releas
 stop: ## Stop all services
 	(test -d .docker-sync && docker-sync stop) || true ## Ignore failure here
 	docker-compose stop
+	docker-compose -f docker-compose.yml -f docker-compose-host.yml stop
 
 stop.watchers: ## Stop asset watchers
 	docker-compose -f docker-compose-watchers.yml stop
@@ -115,6 +125,15 @@ stop.xqueue:
 down: ## Remove all service containers and networks
 	docker-compose -f docker-compose.yml -f docker-compose-watchers.yml -f docker-compose-xqueue.yml -f docker-compose-analytics-pipeline.yml down
 	(test -d .docker-sync && docker-sync clean) || true ## Ignore failure here
+	docker rm edx.devstack.lms
+	docker rm edx.devstack.forum
+	docker rm edx.devstack.studio
+	docker rm edx.devstack.discovery
+	docker rm edx.devstack.ecommerce
+	docker rm edx.devstack.credentials
+	docker rm edx.devstack.devpi
+	docker rm edx.devstack.mongo
+	docker rm edx.devstack.memcached
 
 destroy: ## Remove all devstack-related containers, networks, and volumes
 	./destroy.sh
